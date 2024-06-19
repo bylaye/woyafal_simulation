@@ -65,12 +65,4 @@ def update_type_compteur(numeroCompteur:int, compteur_update:CompteurType, db:Se
             db=db
         )
     raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail='Compteur not found')
-
-
-@router_compteur.put('/update/creditdispo/{numeroCompteur}', response_model=CompteurRechargeUpdate)
-def update_kw_dispo(numeroCompteur: int, compteur_update: CompteurKwDispo, db:Session = Depends(get_db)):
-    db_compteur = resource_compteur.get_compteur(db=db, numeroCompteur=numeroCompteur)
-
-    if db_compteur:
-        return resource_compteur.update_total_kw_dispo(db=db, compteur=db_compteur,new_kw=compteur_update.totalKwDispo)
-    
+ 
