@@ -7,8 +7,8 @@ from .. import models
 
 def new_compteur(db: Session, compteur:CompteurNew):
     db_compteur = models.Compteur(**compteur.model_dump())
-    db_compteur.dateAcquisition = datetime.now()
     db.add(db_compteur)
+    db_compteur.dateAcquisition = datetime.now()
     db.commit()
     return db_compteur
 
@@ -16,6 +16,10 @@ def new_compteur(db: Session, compteur:CompteurNew):
 def get_compteur(db:Session, numeroCompteur: int):
     return db.query(models.Compteur).filter(models.Compteur.numeroCompteur == numeroCompteur).first()
     
+
+def get_all_compteur(db:Session):
+    return db.query(models.Compteur).all()
+
 
 def check_len_compteur(numeroCompteur):
     return len(str(numeroCompteur)) == LEN_DIGIT_COMPTEUR

@@ -29,11 +29,10 @@ class CompteurBase(CompteurNumero, CompteurType):
 
 
 class CompteurNew(CompteurBase):
-    dateAcquisition: Optional[datetime] = datetime.now()
-
+    pass
 
 class Compteur(CompteurBase):
-    pass
+    dateAcquisition: Optional[datetime] = datetime.now()
 
 
 class CompteurRechargeUpdate(CompteurNumero, CompteurKwDispo):

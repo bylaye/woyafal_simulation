@@ -1,5 +1,6 @@
 from ..schemas.compteur import Compteur, CompteurNew, CompteurStatus, CompteurType, CompteurKwDispo, CompteurRechargeUpdate
 from fastapi import Depends, APIRouter, HTTPException, status
+from typing import List
 from ..resources import compteur as resource_compteur
 from ..resources.typeCompteur import get_type_compteur
 from sqlalchemy.orm import Session
@@ -29,6 +30,14 @@ def add_compteur( compteur: CompteurNew, db:Session = Depends(get_db)):
 @router_compteur.get('/getcompteur/{numeroCompteur}', response_model=Compteur)
 def get_compteur(numeroCompteur:int, db:Session = Depends(get_db)):
     db_compteur = resource_compteur.get_compteur(db=db, numeroCompteur=numeroCompteur)
+    if db_compteur:
+        return db_compteur
+    raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail='Compteur not found')
+
+
+@router_compteur.get('/getcompteur/allcompteur/', response_model=List[Compteur])
+def get_all_compteur(db:Session = Depends(get_db)):
+    db_compteur = resource_compteur.get_all_compteur(db=db)
     if db_compteur:
         return db_compteur
     raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail='Compteur not found')
