@@ -1,4 +1,5 @@
 from fastapi import Depends, APIRouter, HTTPException, status
+from typing import List
 from ..schemas.recharge import Recharge, RechargeNew, RechargeQuantite, RechargeCode, RechargeUpdateResponse
 from ..resources import recharge as resource_recharge
 from ..resources.compteur import get_compteur
@@ -16,6 +17,19 @@ def get_recharge(idRecharge:int, db:Session = Depends(get_db)):
     if db_recharge:
         return db_recharge
     raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail='Recharge not exist')
+
+
+@router_recharge.get('/getrecharge/allrecharge/{numeroCompteur}', response_model=List[Recharge])
+def get_all_recharge(numeroCompteur:int, db:Session = Depends(get_db)):
+    db_compteur = get_compteur(db=db, numeroCompteur=numeroCompteur)
+    if not db_compteur:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail='Compteur not found')
+    
+    db_recharge = resource_recharge.get_all_recharge_compteur(db=db, numeroCompteur=numeroCompteur)
+    if db_recharge:
+        return db_recharge
+    return []
+    #raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail='Empty Recharge')
 
 
 @router_recharge.get('/get/currentmonth/{numeroCompteur}', response_model=RechargeQuantite)

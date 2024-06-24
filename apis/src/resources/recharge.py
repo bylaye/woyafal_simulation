@@ -35,6 +35,10 @@ def get_recharge(db:Session, idRecharge: int):
     return db.query(models.Recharge).filter(models.Recharge.idRecharge == idRecharge).first() 
 
 
+def get_all_recharge_compteur(db:Session, numeroCompteur: int):
+    return db.query(models.Recharge).filter(models.Recharge.numeroCompteur == numeroCompteur).all() 
+
+
 def _kw_recharger(montant, total_kw_historic):
     n_kw = 0
     # Si on est toujours sur la premiere tranche
