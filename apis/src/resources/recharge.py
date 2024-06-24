@@ -16,7 +16,7 @@ def generate_code_recharge(len_code=variable.LEN_CODE):
 
 
 def get_sum_recharge_current_month(db:Session, numeroCompteur: int):
-    req = text(""" SELECT ROUND(COALESCE(SUM(quantiteRecharge), 0), 2) as quantiteRecharge 
+    req = text(""" SELECT ROUND(COALESCE(SUM(quantiteRecharge), 0), 1) as quantiteRecharge 
                     FROM Recharge 
                     WHERE numeroCompteur=:numeroCompteur 
                         AND YEAR(dateRecharge) = YEAR(CURRENT_DATE()) 
@@ -63,7 +63,7 @@ def _kw_recharger(montant, total_kw_historic):
         else:
                 montant -= montant*variable.TVA
                 n_kw += montant / variable.PRIX_KW_TRANCHE_3      
-    return n_kw
+    return round(n_kw, 1)
 
 
 def set_quantite_kw_recharge(montant, sum_kw_current_month):
